@@ -71,6 +71,7 @@ jobs:
           fi          
           chmod 600 ~/.ssh/deploy_key
           echo "Host *" > ~/.ssh/config
+          echo "  User fintrack" >> ~/.ssh/config          
           echo "  StrictHostKeyChecking accept-new" >> ~/.ssh/config
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/deploy_key
@@ -137,6 +138,7 @@ jobs:
           echo "${{ secrets.KAMAL_SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           echo "Host *" > ~/.ssh/config
+          echo "  User fintrack" >> ~/.ssh/config 
           echo "  StrictHostKeyChecking accept-new" >> ~/.ssh/config
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/deploy_key
