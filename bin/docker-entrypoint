@@ -5,8 +5,6 @@ if [ -z "${LD_PRELOAD+x}" ]; then
     export LD_PRELOAD
 fi
 
-# Prefer a SECRET_KEY_BASE provided via the environment (e.g. Kamal secret).
-# Only fall back to a self-generated, volume-persisted key when none is supplied.
 SECRET_FILE="/rails/storage/secret_key_base.txt"
 
 if [ -n "${SECRET_KEY_BASE}" ]; then
@@ -23,12 +21,12 @@ fi
 
 RAILS_MASTER_KEY_FILE="/rails/storage/master_key.txt"
 if [ -n "${RAILS_MASTER_KEY}" ]; then
-  echo "SECRET_KEY_BASE fourni via l'environnement, utilisation prioritaire."
+  echo "RAILS_MASTER_KEY fourni via l'environnement, utilisation prioritaire."
 else
   if [ ! -f "$RAILS_MASTER_KEY_FILE" ]; then
-    echo "Aucun SECRET_KEY_BASE fourni, génération d'une nouvelle clé..."
+    echo "Aucun RAILS_MASTER_KEY fourni, génération d'une nouvelle clé..."
     mkdir -p "$(dirname "$RAILS_MASTER_KEY_FILE")"
-    openssl rand -hex 16 > "RAILS_MASTER_KEY"
+    openssl rand -hex 16 > "$RAILS_MASTER_KEY_FILE"
     echo "Clé stockée dans RAILS_MASTER_KEY"
   fi
   export RAILS_MASTER_KEY=$(cat "$RAILS_MASTER_KEY_FILE")
