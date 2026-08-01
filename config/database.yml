@@ -19,14 +19,14 @@ production:
     database: <%= ENV.fetch("POSTGRES_DB", "cnd_fin_track_production") %>
     username: <%= ENV.fetch("POSTGRES_USER", "cnd_fin_track") %>
     password: <%= ENV["POSTGRES_PASSWORD"] %>
-    host: <%= ENV.fetch("DB_HOST", "key_harbour-db") %>
+    host: <%= ENV.fetch("DB_HOST", "cnd_fin_track-db") %>
     port: <%= ENV.fetch("POSTGRES_PORT", 5432) %>
   cache:
     <<: *default
     database: <%= ENV.fetch("POSTGRES_DB", "cnd_fin_track_production") %>_cache
     username: <%= ENV.fetch("POSTGRES_USER", "cnd_fin_track") %>
     password: <%= ENV["POSTGRES_PASSWORD"] %>
-    host: <%= ENV.fetch("DB_HOST", "key_harbour-db") %>
+    host: <%= ENV.fetch("DB_HOST", "cnd_fin_track-db") %>
     port: <%= ENV.fetch("POSTGRES_PORT", 5432) %>
     migrations_paths: db/cache_migrate
   queue:
@@ -34,7 +34,7 @@ production:
     database: <%= ENV.fetch("POSTGRES_DB", "cnd_fin_track_production") %>_queue
     username: <%= ENV.fetch("POSTGRES_USER", "cnd_fin_track") %>
     password: <%= ENV["POSTGRES_PASSWORD"] %>
-    host: <%= ENV.fetch("DB_HOST", "key_harbour-db") %>
+    host: <%= ENV.fetch("DB_HOST", "cnd_fin_track-db") %>
     port: <%= ENV.fetch("POSTGRES_PORT", 5432) %>
     migrations_paths: db/queue_migrate
   cable:
@@ -42,7 +42,7 @@ production:
     database: <%= ENV.fetch("POSTGRES_DB", "cnd_fin_track_production") %>_cable
     username: <%= ENV.fetch("POSTGRES_USER", "cnd_fin_track") %>
     password: <%= ENV["POSTGRES_PASSWORD"] %>
-    host: <%= ENV.fetch("DB_HOST", "key_harbour-db") %>
+    host: <%= ENV.fetch("DB_HOST", "cnd_fin_track-db") %>
     port: <%= ENV.fetch("POSTGRES_PORT", 5432) %>
     migrations_paths: db/cable_migrate
   logs:

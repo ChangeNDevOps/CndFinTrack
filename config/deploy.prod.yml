@@ -20,7 +20,7 @@ accessories:
       secret:
         - POSTGRES_PASSWORD
       clear:
-        DB_HOST: db-postgres
+        DB_HOST: <%= ENV.fetch("DB_HOST", "cnd_fin_track-db") %>
         POSTGRES_DB: <%= ENV.fetch("POSTGRES_DB", "cnd_fin_track_production") %>
         POSTGRES_USER: <%= ENV.fetch("POSTGRES_USER", "cnd_fin_track") %>
         POSTGRES_PORT: <%= ENV.fetch("POSTGRES_PORT", "5433") %>
