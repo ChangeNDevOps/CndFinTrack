@@ -21,6 +21,19 @@ else
   export SECRET_KEY_BASE=$(cat "$SECRET_FILE")
 fi
 
+RAILS_MASTER_KEY_FILE="/rails/storage/secret_key_base.txt"
+if [ -n "${RAILS_MASTER_KEY}" ]; then
+  echo "SECRET_KEY_BASE fourni via l'environnement, utilisation prioritaire."
+else
+  if [ ! -f "$RAILS_MASTER_KEY_FILE" ]; then
+    echo "Aucun SECRET_KEY_BASE fourni, génération d'une nouvelle clé..."
+    mkdir -p "$(dirname "$RAILS_MASTER_KEY_FILE")"
+    openssl rand -hex 16 > "RAILS_MASTER_KEY"
+    echo "Clé stockée dans RAILS_MASTER_KEY"
+  fi
+  export RAILS_MASTER_KEY=$(cat "$RAILS_MASTER_KEY_FILE")
+fi
+
 #MEILI_FILE="/rails/storage/meili_data"
 #
 #if [ ! -f "$MEILI_FILE" ]; then
