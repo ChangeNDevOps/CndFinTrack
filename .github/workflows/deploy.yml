@@ -58,7 +58,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
         with:
-          ref: v${{ needs.get_tag.outputs.version }}
+          ref: v${{ needs.increment_version.outputs.version }}
 
       - name: Set up SSH
         run: |
@@ -97,15 +97,15 @@ jobs:
             echo "Backup completed successfully"
           else
             echo "Database container does not exist, skipping backup"
-            touch backup_before_upgrade_${{ needs.get_tag.outputs.version }}.sql
+            touch backup_before_upgrade_${{ needs.increment_version.outputs.version }}.sql
           fi
 
       - name: Upload DB Backup as Artifact (if created)
         if: success()
         uses: actions/upload-artifact@v7
         with:
-          name: db-backup-prod-${{ needs.get_tag.outputs.version }}
-          path: backup_before_upgrade_${{ needs.get_tag.outputs.version }}.sql
+          name: db-backup-prod-${{ needs.increment_version.outputs.version }}
+          path: backup_before_upgrade_${{ needs.increment_version.outputs.version }}.sql
           retention-days: 30
 
       - name: Boot database accessory (if not running)
@@ -124,7 +124,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
         with:
-          ref: v${{ needs.get_tag.outputs.version }}
+          ref: v${{ needs.increment_version.outputs.version }}
 
       - name: Set up SSH
         run: |
@@ -160,4 +160,4 @@ jobs:
       - name: Deploy with Kamal to Production
         run: kamal deploy -d prod -v
         env:
-          VERSION: ${{ needs.get_tag.outputs.version }}
+          VERSION: ${{ needs.increment_version.outputs.version }}
