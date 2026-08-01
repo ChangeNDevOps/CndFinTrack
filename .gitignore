@@ -34,3 +34,5 @@
 /config/*.key
 
 .idea
+config/credentials.yml.enc
+config/master.key

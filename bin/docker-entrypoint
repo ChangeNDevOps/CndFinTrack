@@ -1,8 +1,81 @@
 #!/bin/bash -e
 
-# If running the rails server then create or migrate existing database
-if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  ./bin/rails db:prepare
+if [ -z "${LD_PRELOAD+x}" ]; then
+    LD_PRELOAD=$(find /usr/lib -name libjemalloc.so.2 -print -quit)
+    export LD_PRELOAD
 fi
 
-exec "${@}"
+# Prefer a SECRET_KEY_BASE provided via the environment (e.g. Kamal secret).
+# Only fall back to a self-generated, volume-persisted key when none is supplied.
+SECRET_FILE="/rails/storage/secret_key_base.txt"
+
+if [ -n "${SECRET_KEY_BASE}" ]; then
+  echo "SECRET_KEY_BASE fourni via l'environnement, utilisation prioritaire."
+else
+  if [ ! -f "$SECRET_FILE" ]; then
+    echo "Aucun SECRET_KEY_BASE fourni, génération d'une nouvelle clé..."
+    mkdir -p "$(dirname "$SECRET_FILE")"
+    bundle exec rails secret > "$SECRET_FILE"
+    echo "Clé stockée dans $SECRET_FILE"
+  fi
+  export SECRET_KEY_BASE=$(cat "$SECRET_FILE")
+fi
+
+MEILI_FILE="/rails/storage/meili_data"
+
+if [ ! -f "$MEILI_FILE" ]; then
+  echo "Génération d'une nouvelle MEILI_MASTER_KEY..."
+  mkdir -p "$(dirname "$MEILI_FILE")"
+  ruby -r securerandom -e "puts SecureRandom.hex(32)" > "$MEILI_FILE"
+  echo "Clé Meili dans $MEILI_FILE"
+fi
+
+export MEILI_MASTER_KEY=$(cat "$MEILI_FILE")
+
+# If running the rails server then create or migrate existing database
+if [[ "${@: -2:1}" == "./bin/rails" && "${@: -1:1}" == "server" ]]; then
+  ./bin/rails db:prepare
+  ./bin/rails db:migrate
+fi
+
+echo -e "\e[32mSUCCESS : Docker Entry point executé avec les arguments: $@"
+
+SECRET_DB="/rails/storage/.env"
+if [ ! -f "$SECRET_DB" ]; then
+  RAW_KEYS=$(bundle exec rails db:encryption:init)
+  PRIMARY=$(echo "$RAW_KEYS" | grep "primary_key:" | awk '{print $2}')
+  DETERMINISTIC=$(echo "$RAW_KEYS" | grep "deterministic_key:" | awk '{print $2}')
+  SALT=$(echo "$RAW_KEYS" | grep "key_derivation_salt:" | awk '{print $2}')
+  echo "ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=$PRIMARY" >> /rails/storage/.env
+  echo "ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=$DETERMINISTIC" >> /rails/storage/.env
+  echo "ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=$SALT" >> /rails/storage/.env
+fi
+
+export $(grep -v '^#' $SECRET_DB | xargs)
+
+cd $MEILI_DB_PATH
+meilisearch --no-analytics --db-path $MEILI_DB_PATH --master-key="${MEILI_MASTER_KEY:-password123}" &
+cd /rails
+
+echo "Vérification et préparation de la base de données..."
+./bin/rails db:prepare
+./bin/rails db:migrate
+
+if [ $# -gt 0 ]; then
+  exec "$@"
+else
+  # Only prepare database if schema.rb doesn't exist (first run)
+  if [ ! -f db/schema.rb ]; then
+    echo "First run: preparing database..."
+    ./bin/rails db:prepare
+  else
+    echo "Database schema already exists, skipping db:prepare"
+  fi
+
+  echo "Starting Rails server on port ${PORT:-8080}..."
+
+  # Reindex Meilisearch in background - don't wait for it
+  ./bin/rails meilisearch:reindex &
+
+  exec bundle exec rails server -b 0.0.0.0 -p "${PORT:-8080}"
+fi

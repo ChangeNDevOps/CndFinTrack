@@ -20,6 +20,10 @@ RUN apt-get update -qq && \
     ln -s /usr/lib/$(uname -m)-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
+RUN curl -L https://install.meilisearch.com | sh && \
+    mv meilisearch /usr/local/bin/ && \
+    chmod +x /usr/local/bin/meilisearch
+
 # Set production environment variables and enable jemalloc for reduced memory usage and latency.
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
@@ -63,6 +67,11 @@ FROM base
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash
+
+USER root
+ENV MEILI_DB_PATH=/rails/meilisearch/data
+RUN mkdir -p $MEILI_DB_PATH && chown rails:rails $MEILI_DB_PATH
+
 USER 1000:1000
 
 # Copy built artifacts: gems, application
@@ -73,5 +82,6 @@ COPY --chown=rails:rails --from=build /rails /rails
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start server via Thruster by default, this can be overwritten at runtime
-EXPOSE 80
-CMD ["./bin/thrust", "./bin/rails", "server"]
+EXPOSE ${PORT}
+
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
