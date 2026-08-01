@@ -1,4 +1,170 @@
-name: deploy.yml
-on:
+name: Deploy to Production
 
+on:
+  push:
+    branches:
+      - main
+
+env:
+  KAMAL_VERSION: ${{ vars.KAMAL_VERSION }}
+  KAMAL_REGISTRY_USERNAME: ${{ github.actor }}
+  KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+  RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+  POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+  POSTGRES_USER: ${{ vars.POSTGRES_USER }}
+  HOST: ${{ vars.HOST }}
+  POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
 jobs:
+  increment_version:
+    name: Increment Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.step_version.outputs.version }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Auto-increment Version and Tag
+        id: step_version
+        run: |
+          bin/release.rb
+          VERSION=$(cat VERSION | tr -d '[:space:]')
+          
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add VERSION
+          git add CHANGELOG.md
+          git commit -m "skip: bump version to $VERSION [skip ci]"
+          git push origin main
+          git tag -a "v$VERSION" -m "Release v$VERSION"
+          git push origin "v$VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+  deploy_accessories:
+    name: Deploy Accessories with Kamal
+    needs: [increment_version]
+    runs-on: ubuntu-latest
+    environment: prod
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: v${{ needs.increment_version.outputs.version }}
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.KAMAL_SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > ~/.ssh/deploy_key
+          
+          if ! ssh-keygen -l -f ~/.ssh/deploy_key > /dev/null 2>&1; then
+            echo "❌ Invalid SSH key format"
+            exit 1
+          fi          
+          chmod 600 ~/.ssh/deploy_key
+          echo "Host *" > ~/.ssh/config
+          echo "  User fintrack" >> ~/.ssh/config          
+          echo "  StrictHostKeyChecking accept-new" >> ~/.ssh/config
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/deploy_key
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> $GITHUB_ENV
+          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> $GITHUB_ENV
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Install Kamal
+        run: gem install kamal -v "$KAMAL_VERSION" --no-document
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ env.KAMAL_REGISTRY_USERNAME }}
+          password: ${{ env.KAMAL_REGISTRY_PASSWORD }}
+
+      - name: Backup database before upgrade (if exists)
+        continue-on-error: true
+        run: |
+          # Check if database container exists before backing up
+          if ssh deploy@$HOST "docker ps -a | grep -q key_harbour-db"; then
+            echo "Database container found, creating backup..."
+            ssh deploy@$HOST "docker exec -e PGPASSWORD='$POSTGRES_PASSWORD' key_harbour-db pg_dump -U $POSTGRES_USER $POSTGRES_DB --no-owner" > backup_before_upgrade_${{ needs.get_tag.outputs.version }}.sql
+            echo "Backup completed successfully"
+          else
+            echo "Database container does not exist, skipping backup"
+            touch backup_before_upgrade_${{ needs.increment_version.outputs.version }}.sql
+          fi
+
+      - name: Upload DB Backup as Artifact (if created)
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: db-backup-prod-${{ needs.increment_version.outputs.version }}
+          path: backup_before_upgrade_${{ needs.increment_version.outputs.version }}.sql
+          retention-days: 30
+
+      - name: Boot database accessory (if not running)
+        run: kamal accessory upgrade db -d prod -y
+
+  deploy:
+    name: Build & Deploy with Kamal
+    needs: [deploy_accessories, increment_version]
+    runs-on: ubuntu-latest
+    environment: prod
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: v${{ needs.increment_version.outputs.version }}
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.KAMAL_SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo "Host *" > ~/.ssh/config
+          echo "  User fintrack" >> ~/.ssh/config 
+          echo "  StrictHostKeyChecking accept-new" >> ~/.ssh/config
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/deploy_key
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> $GITHUB_ENV
+          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> $GITHUB_ENV
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Install Kamal
+        run: gem install kamal -v "$KAMAL_VERSION" --no-document
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ env.KAMAL_REGISTRY_USERNAME }}
+          password: ${{ env.KAMAL_REGISTRY_PASSWORD }}
+
+      - name: Verify secret available to Ruby
+        run: |
+          ruby -e 'abort("❌ KAMAL_REGISTRY_PASSWORD missing for Ruby process") unless ENV["KAMAL_REGISTRY_PASSWORD"]; puts "✅ KAMAL_REGISTRY_PASSWORD present for Ruby process"'
+
+      - name: Deploy with Kamal to Production
+        run: kamal deploy -d prod -v
+        env:
+          VERSION: ${{ needs.increment_version.outputs.version }}
