@@ -14,6 +14,7 @@ env:
   POSTGRES_USER: ${{ vars.POSTGRES_USER }}
   POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
   HOST: ${{ vars.HOST }}
+  DB_HOST: ${{ vars.DB_HOST }}
 jobs:
   increment_version:
     name: Increment Version
@@ -96,9 +97,9 @@ jobs:
         continue-on-error: true
         run: |
           # Check if database container exists before backing up
-          if ssh deploy@$HOST "docker ps -a | grep -q key_harbour-db"; then
+          if ssh deploy@$HOST "docker ps -a | grep -q cnd_fin_track-db"; then
             echo "Database container found, creating backup..."
-            ssh deploy@$HOST "docker exec -e PGPASSWORD='$POSTGRES_PASSWORD' key_harbour-db pg_dump -U $POSTGRES_USER $POSTGRES_DB --no-owner" > backup_before_upgrade_${{ needs.get_tag.outputs.version }}.sql
+            ssh deploy@$HOST "docker exec -e PGPASSWORD='$POSTGRES_PASSWORD' cnd_fin_track-db pg_dump -U $POSTGRES_USER $POSTGRES_DB --no-owner" > backup_before_upgrade_${{ needs.get_tag.outputs.version }}.sql
             echo "Backup completed successfully"
           else
             echo "Database container does not exist, skipping backup"
