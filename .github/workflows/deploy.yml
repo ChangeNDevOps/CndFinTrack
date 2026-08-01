@@ -64,6 +64,11 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.KAMAL_SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > ~/.ssh/deploy_key
+          
+          if ! ssh-keygen -l -f ~/.ssh/deploy_key > /dev/null 2>&1; then
+            echo "❌ Invalid SSH key format"
+            exit 1
+          fi          
           chmod 600 ~/.ssh/deploy_key
           echo "Host *" > ~/.ssh/config
           echo "  StrictHostKeyChecking accept-new" >> ~/.ssh/config
