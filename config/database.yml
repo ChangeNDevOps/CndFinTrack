@@ -14,42 +14,26 @@ test:
   database: cnd_fin_track_test
 
 production:
-  primary:
+  primary: &primary_production
     <<: *default
     database: <%= ENV.fetch("POSTGRES_DB", "cnd_fin_track_production") %>
     username: <%= ENV.fetch("POSTGRES_USER", "cnd_fin_track") %>
     password: <%= ENV["POSTGRES_PASSWORD"] %>
-    host: <%= ENV.fetch("DB_HOST", "cnd_fin_track-db") %>
-    port: <%= ENV.fetch("POSTGRES_PORT", 5432) %>
+    host: <%= ENV.fetch("POSTGRES_HOST", "cnd_fin_track-db") %>
+    port: <%= ENV.fetch("POSTGRES_PORT", 5433) %>
   cache:
-    <<: *default
+    <<: *primary_production
     database: <%= ENV.fetch("POSTGRES_DB", "cnd_fin_track_production") %>_cache
-    username: <%= ENV.fetch("POSTGRES_USER", "cnd_fin_track") %>
-    password: <%= ENV["POSTGRES_PASSWORD"] %>
-    host: <%= ENV.fetch("DB_HOST", "cnd_fin_track-db") %>
-    port: <%= ENV.fetch("POSTGRES_PORT", 5432) %>
     migrations_paths: db/cache_migrate
   queue:
-    <<: *default
+    <<: *primary_production
     database: <%= ENV.fetch("POSTGRES_DB", "cnd_fin_track_production") %>_queue
-    username: <%= ENV.fetch("POSTGRES_USER", "cnd_fin_track") %>
-    password: <%= ENV["POSTGRES_PASSWORD"] %>
-    host: <%= ENV.fetch("DB_HOST", "cnd_fin_track-db") %>
-    port: <%= ENV.fetch("POSTGRES_PORT", 5432) %>
     migrations_paths: db/queue_migrate
   cable:
-    <<: *default
+    <<: *primary_production
     database: <%= ENV.fetch("POSTGRES_DB", "cnd_fin_track_production") %>_cable
-    username: <%= ENV.fetch("POSTGRES_USER", "cnd_fin_track") %>
-    password: <%= ENV["POSTGRES_PASSWORD"] %>
-    host: <%= ENV.fetch("DB_HOST", "cnd_fin_track-db") %>
-    port: <%= ENV.fetch("POSTGRES_PORT", 5432) %>
     migrations_paths: db/cable_migrate
   logs:
-    <<: *default
+    <<: *primary_production
     database: <%= ENV.fetch("POSTGRES_DB", "cnd_fin_track_production") %>_logs
-    username: <%= ENV.fetch("POSTGRES_USER", "cnd_fin_track") %>
-    password: <%= ENV["POSTGRES_PASSWORD"] %>
-    host: <%= ENV.fetch("DB_HOST", "cnd_fin_track-db") %>
-    port: <%= ENV.fetch("POSTGRES_PORT", 5432) %>
     migrations_paths: db/logs_migrate
