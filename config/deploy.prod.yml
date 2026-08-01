@@ -1,14 +1,11 @@
-# Production servers (prod.keyharbour.ca - prod branch)
 servers:
   web:
     hosts:
       - 158.69.116.112
 
-# Boot configuration - wait up to 60 seconds for container to become healthy
 boot:
   wait: 60
 
-# Production proxy configuration
 proxy:
   ssl: true
   host: cndfintrack.c-devops.com
@@ -28,3 +25,6 @@ accessories:
         POSTGRES_USER: <%= ENV.fetch("POSTGRES_USER", "cnd_fin_track") %>
     volumes:
       - prod-cnd_fin_track:/var/lib/postgresql
+
+ssh:
+  user: fintrack
