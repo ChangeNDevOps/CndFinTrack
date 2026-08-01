@@ -14,7 +14,7 @@ proxy:
 accessories:
   db:
     image: postgres:18
-    host: 158.69.116.112
+    host: <%= ENV.fetch("POSTGRES_HOST", "cnd_fin_track-db") %>
     port: "5433:5432"
     env:
       secret:
