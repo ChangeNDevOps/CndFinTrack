@@ -1,0 +1,21 @@
+a:hover {
+    color: #008080;
+}
+@font-face {
+    font-family: 'poxel';
+    src: url('poxel-font.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'lcddot';
+    src: url('lcddot_tr.ttf') format('truetype');
+}
+.navbar-brand span {
+    font-family: 'poxel', sans-serif;
+}
+.navbar-brand span.biggest {
+    font-family: 'poxel', sans-serif;
+}
+:root {
+    --tblr-primary: #17a2b8;
+    --tblr-primary-rgb: 23, 162, 184;
+}

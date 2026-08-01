@@ -1,0 +1,51 @@
+# Name of your application. Used to uniquely configure containers.
+service: cnd_fin_track
+
+image: ChangeNDevOps/CndFinTrack
+
+registry:
+  server: ghcr.io
+  username: <%= ENV["KAMAL_REGISTRY_USERNAME"] %>
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  secret:
+    - RAILS_MASTER_KEY
+    - POSTGRES_PASSWORD
+    - POSTGRES_USER
+    - POSTGRES_DB
+    - KAMAL_REGISTRY_PASSWORD
+    - MEILI_MASTER_KEY
+  clear:
+    SOLID_QUEUE_IN_PUMA: true
+    PORT: 8080
+    BACKEND_PORT: 8080
+    HOST: <%= ENV["HOST"] %>
+    RAILS_LOG_LEVEL: debug
+    RAILS_ENV: production
+
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole --include-password"
+
+volumes:
+  - "cnd_fin_track_storage:/rails/storage"
+  - "meili_data:/meili_data"
+
+asset_path: /rails/public/assets
+
+# Configure the image builder.
+builder:
+  arch: amd64
+
+  secrets:
+    - KAMAL_REGISTRY_PASSWORD
+    - RAILS_MASTER_KEY
+    - POSTGRES_PASSWORD
+    - POSTGRES_USER
+    - POSTGRES_DB
+    - HOST
+    - MEILI_MASTER_KEY
