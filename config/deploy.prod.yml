@@ -15,15 +15,14 @@ accessories:
   db:
     image: postgres:18
     host: 158.69.116.112
-    port: 5433
+    port: "5433:5432"
     env:
       secret:
         - POSTGRES_PASSWORD
+        - POSTGRES_DB
+        - POSTGRES_USER
       clear:
-        DB_HOST: <%= ENV.fetch("DB_HOST", "cnd_fin_track-db") %>
-        POSTGRES_DB: <%= ENV.fetch("POSTGRES_DB", "cnd_fin_track_production") %>
-        POSTGRES_USER: <%= ENV.fetch("POSTGRES_USER", "cnd_fin_track") %>
-        POSTGRES_PORT: <%= ENV.fetch("POSTGRES_PORT", "5433") %>
+        DB_HOST: <%= ENV.fetch("POSTGRES_HOST", "cnd_fin_track-db") %>
     volumes:
       - prod-cnd_fin_track:/var/lib/postgresql
 
