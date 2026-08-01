@@ -4,7 +4,7 @@ name: Deploy to Production
 on:
   push:
     branches:
-      - prod
+      - main
 
 env:
   KAMAL_VERSION: ${{ vars.KAMAL_VERSION }}
