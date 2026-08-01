@@ -13,8 +13,8 @@ env:
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   POSTGRES_DB: ${{ vars.POSTGRES_DB }}
   POSTGRES_USER: ${{ vars.POSTGRES_USER }}
-  HOST: ${{ vars.HOST }}
   POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
+  HOST: ${{ vars.HOST }}
 jobs:
   increment_version:
     name: Increment Version
