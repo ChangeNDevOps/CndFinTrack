@@ -1,7 +1,7 @@
 # Name of your application. Used to uniquely configure containers.
 service: cnd_fin_track
 
-image: ChangeNDevOps/CndFinTrack
+image: ghcr.io/ChangeNDevOps/CndFinTrack
 
 registry:
   server: ghcr.io
