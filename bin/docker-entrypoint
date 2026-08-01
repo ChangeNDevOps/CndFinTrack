@@ -21,7 +21,7 @@ else
   export SECRET_KEY_BASE=$(cat "$SECRET_FILE")
 fi
 
-RAILS_MASTER_KEY_FILE="/rails/storage/secret_key_base.txt"
+RAILS_MASTER_KEY_FILE="/rails/storage/master_key.txt"
 if [ -n "${RAILS_MASTER_KEY}" ]; then
   echo "SECRET_KEY_BASE fourni via l'environnement, utilisation prioritaire."
 else
