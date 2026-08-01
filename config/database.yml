@@ -9,8 +9,6 @@ default: &default
 development:
   <<: *default
   database: cnd_fin_track_development
-
-
 test:
   <<: *default
   database: cnd_fin_track_test

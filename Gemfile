@@ -55,5 +55,6 @@ gem "colorize"
 gem "rb-gravatar"
 gem "meilisearch-rails"
 gem "rails_icons"
+gem "ruby-vips"
 
 gem "bcrypt", "~> 3.1"
