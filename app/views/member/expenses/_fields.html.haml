@@ -1,0 +1,16 @@
+= f.association :supplier,
+  as: :select,
+  wrapper: :horizontal_form,
+  collection: @company.suppliers,
+  input_html: { multiple: false, data: { controller: "tom-select" } }
+= f.input :name
+= f.input :amount
+= f.input :invoiced_on, wrapper: :horizontal_form, as: :string, input_html: { data: { controller: "datepicker" } }
+= f.input :paid_on, wrapper: :horizontal_form, as: :string, input_html: { data: { controller: "datepicker" } }
+
+
+= f.association :tags,
+  as: :select,
+  wrapper: :horizontal_form,
+  collection: @company.tags,
+  input_html: { multiple: true, data: { controller: "tom-select" } }

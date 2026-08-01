@@ -1,0 +1,41 @@
+= f.input :name
+= f.input :available_on, wrapper: :horizontal_form, as: :string, input_html: { data: { controller: "datepicker" } }
+= f.input :available_duration_in_month
+= f.association :customer,
+  as: :select,
+  wrapper: :horizontal_form,
+  collection: @company.customers.active,
+  input_html: { multiple: false, data: { controller: "tom-select" } }
+= f.input :status,
+  as: :select,
+  wrapper: :horizontal_form,
+  collection: f.object.class.statuses.keys.map { |status| [status.titleize, status] },
+  include_blank: false
+
+= f.association :tags,
+  as: :select,
+  wrapper: :horizontal_form,
+  collection: @company.tags,
+  input_html: { multiple: true, data: { controller: "tom-select" } }
+%hr
+%div{"data-nested-form-target" => "container"}
+  = f.simple_fields_for :quote_items do |item_form|
+    = render "quote_item_fields", f: item_form
+%button.btn.btn-secondary.btn-sm{"data-action" => "nested-form#add", :type => "button"}
+  ＋ Ajouter un article
+%template{"data-nested-form-target" => "template"}
+  = f.simple_fields_for :quote_items, QuoteItem.new, child_index: "NEW_RECORD" do |item_form|
+    = render "quote_item_fields", f: item_form
+%hr
+= f.input :total_ht,
+          input_html: { data: { nested_form_target: "totalHtOutput" } },
+          readonly: true
+= f.input :total_tvq,
+          input_html: { data: { nested_form_target: "totalTvqOutput" } },
+          readonly: true
+= f.input :total_tps,
+          input_html: { data: { nested_form_target: "totalTpsOutput" } },
+          readonly: true
+= f.input :total,
+          input_html: { data: { nested_form_target: "totalOutput" } },
+          readonly: true

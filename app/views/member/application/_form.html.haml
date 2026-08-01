@@ -1,0 +1,18 @@
+%div{class: "col-#{lookup_context.exists?("hint", [controller_path], true) ? '8' : '12'}"}
+  .card.card-lg
+    .card-body
+      = simple_form_for form_definition, html: {class: "simple_form", data: { controller: "nested-form" }}, wrapper: :horizontal_form  do |f|
+        = render partial: "form_error", locals: { form_table: @item }
+        = render partial: "fields", locals: { f: f }
+        .row.mb-0
+          .col-sm-9.offset-sm-3
+            %input.btn.btn-primary.btn-primary{"data-disable-with" => "Save User2", :name => "commit", :type => "submit", :value => "Save"}
+            = link_to "Cancel", back_path, class: "btn btn-primary btn-outline-secondary"
+
+- if lookup_context.exists?("hint", [controller_path], true)
+  .col-4
+    .card
+      .card-header
+        %h3.card-title Help context
+      .card-body
+        Voici la zone de helper

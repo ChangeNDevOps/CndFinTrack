@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "@rails/actiontext": "^7.2.302",
     "@tabler/core": "^1.4.0",
     "@tabler/icons": "^3.46.0",
-    "@tabler/icons-webfont": "^3.46.0"
+    "@tabler/icons-webfont": "^3.46.0",
+    "trix": "^2.1.19"
   }
 }

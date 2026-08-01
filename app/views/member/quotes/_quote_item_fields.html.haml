@@ -1,0 +1,19 @@
+.nested-fields.row.g-3.align-items-end.mb-2{"data-new-record" => "#{f.object.new_record?}"}
+  .col-md-4
+    = f.association :product,
+      as: :select,
+      wrapper: :vertical_form,
+      collection: @company.products.map { |p| [p.name, p.id, { 'data-unit_price' => p.unit_price }] },
+      label: "Produit",
+      input_html: { class: "product-select", data: { controller: "tom-select", action: "change->nested-form#updatePriceFromProduct" } }
+  .col-md-2
+    = f.input :quantity, label: "Quantité", wrapper: :vertical_form, input_html: { class: "item-quantity", data: { action: "input->nested-form#calculateRowTotal" }, min: 1 }
+  = f.hidden_field :_destroy, value: f.object._destroy || "0"
+  .col-md-2
+    - current_price = f.object.product&.unit_price
+    = f.input :unit_price, wrapper: :vertical_form, input_html: { class: "item-unit_price", value: current_price ? '%.2f' % current_price : nil , readonly: true, data: { action: "input->nested-form#calculateRowTotal" } }
+  .col-md-2
+    = f.input :total, label: "Total", wrapper: :vertical_form, input_html: { class: "item-row-total", readonly: true }
+  .col-md-2.align-self-center.mt-4.text-center
+    %button.btn.btn-danger.btn-sm.w-75{"data-action" => "nested-form#remove", :type => "button"}
+      Supprimer

@@ -1,0 +1,7 @@
+= f.input :name
+= f.association :team,
+    collection: Team.all,
+    as: :select,
+    wrapper: :horizontal_form,
+    include_blank: false,
+    input_html: { multiple: false, data: { controller: "tom-select" } }

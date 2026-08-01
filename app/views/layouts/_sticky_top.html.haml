@@ -1,0 +1,19 @@
+.sticky-top{style: "left: 15rem;width: calc(100% - 15rem);"}
+  %header.navbar.navbar-expand-md.sticky-top.d-print-none
+    .container-xl
+      .col
+        = render partial: 'breadcrumbs'
+      .navbar-nav.flex-row.order-md-last
+        .nav-item.dropdown
+          %a.nav-link.d-flex.lh-1.p-0.px-2{"aria-label" => "Open user menu", "data-bs-toggle" => "dropdown", :href => "#"}
+            %span.avatar.avatar-sm{:style => "background-image: url(./static/avatars/000m.jpg)"}
+            .d-none.d-xl-block.ps-2
+              %div Paweł Kuna
+              .mt-1.small.text-secondary UI Designer
+          .dropdown-menu.dropdown-menu-end.dropdown-menu-arrow
+            %a.dropdown-item{:href => "#"} Status
+            %a.dropdown-item{:href => "./profile.html"} Profile
+            %a.dropdown-item{:href => "#"} Feedback
+            .dropdown-divider
+            %a.dropdown-item{:href => "./settings.html"} Settings
+            %a.dropdown-item{:href => "./sign-in.html"} Logout

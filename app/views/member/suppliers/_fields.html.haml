@@ -1,0 +1,34 @@
+= f.input :name
+= f.input :address1
+= f.input :address2
+= f.input :zip
+= f.input :city
+= f.input :prefix
+= f.input :taxable,
+  wrapper: :horizontal_boolean,
+  wrapper_html: { class: "form-check form-switch mb-3" }
+= f.input :status,
+  as: :select,
+  wrapper: :horizontal_form,
+  collection: f.object.class.statuses.keys.map { |status| [status.titleize, status] },
+  include_blank: false
+
+.country{ "data-controller" => "location"}
+  = f.input :country_code,
+    as: :country,
+    wrapper: :horizontal_form,
+    prompt: t('.select'),
+    priority: ["CA", "FR"],
+    input_html: { data: { action: "change->location#updateProvinces", location_target: "country" } }
+
+  = f.input :province_code,
+    collection: province_options(f.object.country_code),
+    wrapper: :horizontal_form,
+    prompt: t('.select'),
+    input_html: { data: { location_target: "province" } }
+
+= f.association :tags,
+  as: :select,
+  wrapper: :horizontal_form,
+  collection: @company.tags,
+  input_html: { multiple: true, data: { controller: "tom-select" } }
