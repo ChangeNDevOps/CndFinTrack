@@ -14,14 +14,15 @@ proxy:
 accessories:
   db:
     image: postgres:18
-    host: <%= ENV.fetch("POSTGRES_HOST", "cnd_fin_track-db") %>
-    port: "5433:5432"
+    host: 158.69.116.112
+    port: "5433"
     env:
       secret:
         - POSTGRES_PASSWORD
         - POSTGRES_DB
         - POSTGRES_USER
       clear:
+        PGPORT: 5433
         DB_HOST: <%= ENV.fetch("POSTGRES_HOST", "cnd_fin_track-db") %>
     volumes:
       - prod-cnd_fin_track:/var/lib/postgresql
