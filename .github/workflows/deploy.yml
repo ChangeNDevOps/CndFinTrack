@@ -14,7 +14,7 @@ env:
   POSTGRES_USER: ${{ vars.POSTGRES_USER }}
   POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
   HOST: ${{ vars.HOST }}
-  DB_HOST: ${{ vars.DB_HOST }}
+  POSTGRES_HOST: ${{ vars.POSTGRES_HOST }}
 jobs:
   increment_version:
     name: Increment Version

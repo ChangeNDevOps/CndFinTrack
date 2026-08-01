@@ -17,7 +17,7 @@ env:
     - POSTGRES_PORT
     - KAMAL_REGISTRY_PASSWORD
     - MEILI_MASTER_KEY
-    - DB_HOST
+    - POSTGRES_HOST
   clear:
     SOLID_QUEUE_IN_PUMA: true
     PORT: 8080
@@ -50,4 +50,4 @@ builder:
     - POSTGRES_PORT
     - HOST
     - MEILI_MASTER_KEY
-    - DB_HOST
+    - POSTGRES_HOST
