@@ -1,0 +1,7 @@
+.page-pretitle
+  - if breadcrumbs.present?
+    - breadcrumbs[0..-2].each do |breadcrumb|
+      = link_to breadcrumb[:title], breadcrumb[:path]
+      %span.text-muted-foreground.text-sm
+        \/
+    = breadcrumbs[-1][:title]

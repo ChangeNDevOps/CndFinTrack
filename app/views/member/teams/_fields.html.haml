@@ -1,0 +1,9 @@
+= f.input :name
+= f.association :users,
+    collection: User.all,
+    label_method: :email_address,
+    value_method: :id,
+    as: :select,
+    wrapper: :horizontal_form,
+    input_html: { multiple: true, class: 'select2-multiple' },
+    include_blank: false

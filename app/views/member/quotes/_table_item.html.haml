@@ -1,0 +1,44 @@
+%td
+  #{item.uuid}
+
+%td
+  .d-flex.py-1.align-items-center
+    .flex-fill
+      .font-weight-medium #{item.customer.name}
+      .text-secondary #{item.name}
+      - if item.invoice
+        = link_to "invoice #{item.invoice.uuid}", member_company_invoice_path(@company, item.invoice), class: "member_link"
+      - else
+        No invoice yet
+  .d-block.text-secondary.text-truncate.mt-2
+    - item.tags.each do |tag|
+      %span.tag
+        = icon 'tag', class: "icon-xs"
+        = tag.name
+  %td.text-end
+    = number_to_currency item.calc_total_ht
+  %td.text-secondary.text-center
+    = icon "circle-check", class: "text-success icon-lg" if item.approved?
+    = icon "circle-x", class: "text-danger icon-lg" if item.rejected?
+  %td
+    .col-auto
+      .dropdown.no-arrow
+        %a.dropdown-toggle.text-secondary{"aria-expanded" => "false", "aria-haspopup" => "true", "aria-label" => "Select time range for revenue", "data-bs-toggle" => "dropdown", :href => "#"}= icon "dots-vertical"
+        .dropdown-menu.dropdown-menu-end{"aria-labelledby" => "revenue-dropdown", :style => ""}
+          - unless item.invoice
+            = link_to new_member_company_invoice_path(@company, invoice: {quote_id: item.id}), class: "dropdown-item" do
+              = icon "file-invoice"
+              Create invoice
+          = link_to reject_member_company_quote_path(@company, item), class: "dropdown-item", method: :patch, data:  { turbo_method: :patch, turbo_confirm: "Are you sure you want to reject ?" } do
+            = icon "x", class: "text-danger"
+            Reject
+          = link_to approve_member_company_quote_path(@company, item), class: "dropdown-item", method: :patch, data:  { turbo_method: :patch, turbo_confirm: "Are you sure you want to Confirm ?" } do
+            = icon "check", class: "text-success"
+            Approve
+          = link_to edit_member_company_quote_path(@company, item), class: "dropdown-item" do
+            = icon "edit"
+            Edit
+          .dropdown-divider
+          = link_to member_company_quote_path(@company, item), class: "dropdown-item", method: :delete, data:  { turbo_method: :delete, turbo_confirm: "Confirm delete ?" } do
+            = icon "trash"
+            Delete

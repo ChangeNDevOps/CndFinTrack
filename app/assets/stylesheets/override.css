@@ -15,7 +15,122 @@ a:hover {
 .navbar-brand span.biggest {
     font-family: 'poxel', sans-serif;
 }
-:root {
-    --tblr-primary: #17a2b8;
-    --tblr-primary-rgb: 23, 162, 184;
+/*:root {*/
+/*    --tblr-primary: #00a2b8;*/
+/*    --tblr-primary-rgb: 23, 162, 184;*/
+/*}*/
+:root, [data-bs-theme="light"] {
+    --tblr-primary: var(--tblr-cyan);
+    --tblr-primary-rgb: var(--tblr-cyan-rgb);
+    --tblr-primary-hover: #118da0;
+    --tblr-primary-active: #0e798a;
+    --tblr-border-radius-scale: 2;
 }
+.offcanvas {
+    --tblr-offcanvas-padding-y:1.0rem;
+}
+[data-bs-theme="dark"] {
+    --tblr-primary: var(--tblr-cyan);
+    --tblr-primary-rgb: var(--tblr-cyan-rgb);
+}
+.no-arrow .dropdown-toggle:after {
+    display: none;
+}
+
+.icon-xs {
+    width: 16px;
+    height: 16px;
+}
+
+.icon-sm {
+    width: 20px;
+    height: 20px;
+}
+.icon-lg {
+    width: 32px;
+    height: 32px;
+}
+.col-form-label.required:after, .form-label.required:after {
+    content: ""
+}
+.col-form-label.required abbr, .form-label.required abbr {
+    color: #d63939;
+}
+.form-check {
+    padding-left: 1.50rem;
+}
+
+/*.select2-container--bootstrap-5 .select2-selection {*/
+/*    border-color: var(--tblr-border-color, #d9dbde) !important;*/
+/*    border-radius: var(--tblr-border-radius, 4px) !important;*/
+/*    background-color: var(--tblr-bg-forms, #ffffff) !important;*/
+/*    color: var(--tblr-body-color, #1e293b) !important;*/
+/*    font-family: inherit;*/
+/*    min-height: 36px; // Alignement parfait sur la hauteur des inputs Tabler*/
+/*display: flex;*/
+/*    align-items: center;*/
+/*}*/
+
+/*.select2-container--bootstrap-5.select2-container--focus .select2-selection,*/
+/*.select2-container--bootstrap-5.select2-container--open .select2-selection {*/
+/*    border-color: #90b5ff !important;*/
+/*    box-shadow: 0 0 0 0.25rem rgba(32, 107, 196, 0.25) !important; // Couleur primaire Tabler (Gris/Bleu)*/
+/*}*/
+
+/*.select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice {*/
+/*    background-color: var(--tblr-bg-surface, #f8fafc) !important;*/
+/*    border: 1px solid var(--tblr-border-color, #d9dbde) !important;*/
+/*    color: var(--tblr-body-color, #1e293b) !important;*/
+/*    border-radius: 3px !important;*/
+/*    padding: 2px 6px !important;*/
+/*    font-size: 0.85rem;*/
+/*}*/
+
+/*.select2-container--bootstrap-5 .select2-dropdown {*/
+/*    border-color: var(--tblr-border-color-translucent, rgba(4, 32, 69, 0.15)) !important;*/
+/*    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;*/
+/*    border-radius: var(--tblr-border-radius, 4px) !important;*/
+/*}*/
+
+/*.select2-container--bootstrap-5 .select2-results__option--highlighted[aria-selected] {*/
+/*    background-color: rgba(32, 107, 196, 0.08) !important;*/
+/*    color: #206bc4 !important;*/
+/*}*/
+
+/*.select2-container--bootstrap-5 .select2-selection--multiple {*/
+/*   min-height: 38px;*/
+/*   padding: 3px 6px;*/
+/*   display: flex;*/
+/*   flex-wrap: wrap; // Aligne les puces proprement s'il y en a beaucoup*/
+/*align-items: center;*/
+/*   gap: 4px; // Espace entre les badges*/
+/*}*/
+
+/*.select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice {*/
+/*    background-color: #f1f5f9 !important; // Couleur de fond gris clair (slate-100)*/
+/*border: 1px solid #e2e8f0 !important; // Bordure subtile*/
+/*color: #1e293b !important;           // Texte foncé Tabler*/
+/*font-size: 0.85rem !important;*/
+/*    font-weight: 500;*/
+/*    padding: 2px 8px !important;*/
+/*    border-radius: 4px !important;*/
+/*    display: inline-flex;*/
+/*    align-items: center;*/
+/*}*/
+
+/* .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice__remove {*/
+/*     color: #94a3b8 !important; // Gris discret*/
+/* margin-right: 6px !important;*/
+/*     border: none !important;*/
+/*     background: transparent !important;*/
+/*     font-weight: bold;*/
+
+/*     &:hover {*/
+/*         color: #ef4444 !important; // Devient rouge au survol*/
+/*     }*/
+/* }*/
+
+/*.select2-container--bootstrap-5 .select2-search--inline .select2-search__field {*/
+/*   margin: 0 !important;*/
+/*   height: 24px;*/
+/*}*/

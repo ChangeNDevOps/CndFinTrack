@@ -1,0 +1,20 @@
+.col.text-truncate
+  %a.text-reset.d-block{:href => "#"} #{item.customer.name} / #{item.quote.name}
+  .d-block.text-secondary.text-truncate.mt-1= number_to_currency item.quote.calc_total_ht
+  .d-block.text-secondary.text-truncate.mt-2
+    - item.quote.tags.each do |tag|
+      %span.tag
+        = icon 'tag', class: "icon-xs"
+        = tag.name
+
+.col-auto
+  .dropdown.no-arrow
+    %a.dropdown-toggle.text-secondary{"aria-expanded" => "false", "aria-haspopup" => "true", "aria-label" => "Select time range for revenue", "data-bs-toggle" => "dropdown", :href => "#"}= icon "dots-vertical"
+    .dropdown-menu.dropdown-menu-end{"aria-labelledby" => "revenue-dropdown", :style => ""}
+      = link_to edit_member_company_invoice_path(@company, item), class: "dropdown-item" do
+        = icon "edit"
+        Edit
+      .dropdown-divider
+      = link_to member_company_invoice_path(@company, item), class: "dropdown-item", method: :delete, data:  { turbo_method: :delete, turbo_confirm: "Confirm ?" } do
+        = icon "trash"
+        Delete

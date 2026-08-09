@@ -24,5 +24,41 @@
     = stylesheet_link_tag :app, "data-turbo-track": "reload"
     = javascript_importmap_tags
     = stylesheet_link_tag :override, "data-turbo-track": "reload"
-  %body.layout-fluid
-    = yield
+  %body.layout-fluid{"data-bs-theme-primary" => "cyan"}
+    .page
+      = render partial: 'layouts/sticky_top'
+      = render partial: 'layouts/navbar_simple'
+      .page-wrapper
+        .page-header.d-print-none{"aria-label" => "Page header"}
+          .container-xl
+            .row.g-2.align-items-center
+              .col
+                %h1.page-title= page_title
+              .col-auto.ms-auto.d-print-none
+                .btn-list
+                  -if search == true && ["index"].include?(action_name)
+                    = link_to "Search", "", class: "btn", "aria-controls" => "offcanvasEnd", "data-bs-toggle" => "offcanvas", :href => "#offcanvasEnd", :role => "button"
+                  - if add_button(:top)
+                    = link_to add_button(:top)[:path], class: "btn btn-primary btn-5 d-none d-sm-inline-block" do
+                      = icon add_button(:top)[:icon]
+                      = add_button(:top)[:title]
+        .page-body
+          .container-xl
+            .row.row-deck.row-cards
+              = yield
+          %footer.footer.footer-transparent.d-print-none
+            .container-xl
+              .row.text-center.align-items-center.flex-row-reverse
+                .col-lg-auto.ms-lg-auto
+                  %ul.list-inline.list-inline-dots.mb-0
+                    %li.list-inline-item
+                      %a.link-secondary{:href => "https://changendevops.com", :rel => "noopener", :target => "_blank"} Lide Consultant Inc.
+                  -#       Sponsor
+                .col-12.col-lg-auto.mt-3.mt-lg-0
+                  %ul.list-inline.list-inline-dots.mb-0
+                    %li.list-inline-item
+                      Copyright © 2026
+                      %a.link-secondary{:href => "."} Cnd Inc.
+                      \. All rights reserved.
+                    %li.list-inline-item
+                      v#{Rails.configuration.version}
