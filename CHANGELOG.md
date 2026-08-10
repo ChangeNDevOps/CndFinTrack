@@ -1,3 +1,10 @@
+## v0.1.14 (2026-08-10)
+
+### Bug Fixes
+* Add logout feature (70393400)
+
+---
+
 ## v0.1.13 (2026-08-09)
 
 ### Maintenance
