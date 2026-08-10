@@ -1,4 +1,5 @@
 class Company < ApplicationRecord
+  include Archivable
   belongs_to :team
   has_many :customers
   has_many :categories

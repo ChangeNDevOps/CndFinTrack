@@ -5,34 +5,6 @@
 
 ---
 
-## v0.5.0 (2026-08-10)
-
-### Features
-* Adding meilisearch inside the deployement (49188c48)
-
----
-
-## v0.4.0 (2026-08-10)
-
-### Features
-* Adding meilisearch inside the deployement (c64eb22d)
-
----
-
-## v0.3.0 (2026-08-10)
-
-### Features
-* Adding meilisearch inside the deployement (6c4e543f)
-
----
-
-## v0.2.0 (2026-08-10)
-
-### Features
-* Adding meilisearch inside the deployement (ffc27d2c)
-
----
-
 ## v0.1.18 (2026-08-10)
 
 ### Bug Fixes
