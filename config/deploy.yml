@@ -19,7 +19,6 @@ env:
     - MEILI_MASTER_KEY
     - POSTGRES_HOST
     - MEILISEARCH_API_KEY
-    - MEILI_MASTER_KEY
   clear:
     SOLID_QUEUE_IN_PUMA: true
     PORT: 8080
