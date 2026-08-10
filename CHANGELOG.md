@@ -1,3 +1,10 @@
+## v0.4.0 (2026-08-10)
+
+### Features
+* Adding meilisearch inside the deployement (c64eb22d)
+
+---
+
 ## v0.3.0 (2026-08-10)
 
 ### Features
