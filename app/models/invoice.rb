@@ -1,17 +1,34 @@
 class Invoice < ApplicationRecord
   include Meilisearch::Rails
   belongs_to :quote
-  has_one :payment, dependent: :destroy
   has_many :tax_return_payments, dependent: :destroy
   has_many :tags, through: :taggings
   has_many :quote_items, as: :allocatable
+  has_many :payments
   scope :not_due, -> { where('due_on > ?', Time.zone.today) }
   scope :due,     -> { where('due_on <= ?', Time.zone.today) }
   after_create :set_uuid
 
-  def calc_total_ht
-    quote.calc_total_ht
+  def name
+    uuid
   end
+
+  def calc_total_ht
+    quote.calc_total_ht.round(2)
+  end
+
+  def calc_total_tps
+    (quote.calc_total_ht * Company::TPS_TAX).round(2)
+  end
+
+  def calc_total_tvq
+    (quote.calc_total_ht * Company::TVQ_TAX).round(2)
+  end
+
+  def calc_total_tax
+    (quote.calc_total_ht * Company::ALL_TAX).round(2)
+  end
+
 
   def company
     quote.customer.company
@@ -23,6 +40,18 @@ class Invoice < ApplicationRecord
 
   def quote_items
     quote.quote_items
+  end
+
+  def amount_paid
+    payments.sum(:amount).round(2)
+  end
+
+  def amount_unpaid
+    calc_total_tax.round(2) - amount_paid
+  end
+
+  def paid?
+    amount_unpaid == 0
   end
 
   def set_uuid
