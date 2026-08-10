@@ -1,3 +1,10 @@
+## v0.6.1 (2026-08-10)
+
+### Bug Fixes
+* Form for company (536072cf)
+
+---
+
 ## v0.6.0 (2026-08-10)
 
 ### Features
