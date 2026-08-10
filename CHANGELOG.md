@@ -1,3 +1,10 @@
+## v0.7.0 (2026-08-10)
+
+### Features
+* Make payment works (ddec41f3)
+
+---
+
 ## v0.6.1 (2026-08-10)
 
 ### Bug Fixes
