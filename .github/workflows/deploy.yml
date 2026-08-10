@@ -117,6 +117,9 @@ jobs:
       - name: Boot database accessory (if not running)
         run: kamal accessory upgrade db -d prod -y
 
+      - name: Boot meilisearch accessory (if not running)
+        run: kamal accessory upgrade meilisearch -d prod -y
+
   deploy:
     name: Build & Deploy with Kamal
     needs: [deploy_accessories, increment_version]

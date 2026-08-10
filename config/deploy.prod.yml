@@ -11,21 +11,5 @@ proxy:
   host: cndfintrack.c-devops.com
   app_port: 8080
 
-accessories:
-  db:
-    image: postgres:18
-    host: 158.69.116.112
-    port: "5433"
-    env:
-      secret:
-        - POSTGRES_PASSWORD
-        - POSTGRES_DB
-        - POSTGRES_USER
-      clear:
-        PGPORT: 5433
-        DB_HOST: <%= ENV.fetch("POSTGRES_HOST", "cnd_fin_track-db") %>
-    volumes:
-      - prod-cnd_fin_track:/var/lib/postgresql
-
 ssh:
   user: fintrack
