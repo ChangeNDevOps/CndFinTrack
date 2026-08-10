@@ -1,4 +1,7 @@
 class Company < ApplicationRecord
+  TPS_TAX = 0.05
+  TVQ_TAX = 0.09975
+  ALL_TAX =  1.14975
   include Archivable
   belongs_to :team
   has_many :customers

@@ -36,3 +36,4 @@
 .idea
 config/credentials.yml.enc
 config/master.key
+.DS_Store
