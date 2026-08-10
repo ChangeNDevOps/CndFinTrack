@@ -26,5 +26,5 @@ Rails.application.routes.draw do
     end
     resources :teams
   end
-  root 'home#index'
+  root 'session#new'
 end
