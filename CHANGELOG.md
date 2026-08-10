@@ -1,3 +1,17 @@
+## v0.2.0 (2026-08-10)
+
+### Features
+* Adding meilisearch inside the deployement (ffc27d2c)
+
+---
+
+## v0.1.18 (2026-08-10)
+
+### Bug Fixes
+* Typo in root path (bcdd45e4)
+
+---
+
 ## v0.1.17 (2026-08-10)
 
 ### Bug Fixes
