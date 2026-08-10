@@ -1,3 +1,10 @@
+## v0.1.16 (2026-08-10)
+
+### Bug Fixes
+* Typo in root path (d60cba87)
+
+---
+
 ## v0.1.15 (2026-08-10)
 
 ### Bug Fixes
