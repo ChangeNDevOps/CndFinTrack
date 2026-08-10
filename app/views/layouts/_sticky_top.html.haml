@@ -6,14 +6,10 @@
       .navbar-nav.flex-row.order-md-last
         .nav-item.dropdown
           %a.nav-link.d-flex.lh-1.p-0.px-2{"aria-label" => "Open user menu", "data-bs-toggle" => "dropdown", :href => "#"}
-            %span.avatar.avatar-sm{:style => "background-image: url(./static/avatars/000m.jpg)"}
+            %span.avatar.avatar-sm{:style => "background-image: url(#{Gravatar.src(Current.user.email_address, 32)})"}
             .d-none.d-xl-block.ps-2
               %div Paweł Kuna
               .mt-1.small.text-secondary UI Designer
           .dropdown-menu.dropdown-menu-end.dropdown-menu-arrow
-            %a.dropdown-item{:href => "#"} Status
-            %a.dropdown-item{:href => "./profile.html"} Profile
-            %a.dropdown-item{:href => "#"} Feedback
             .dropdown-divider
-            %a.dropdown-item{:href => "./settings.html"} Settings
-            %a.dropdown-item{:href => "./sign-in.html"} Logout
+            = link_to "Logout", session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Logout"}, class: 'dropdown-item'
