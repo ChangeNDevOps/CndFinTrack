@@ -24,6 +24,6 @@ class Member::CompaniesController < Member::ApplicationController
     unless params[:company].present?
       return {}
     end
-    params.expect(company: [ :name, :team_id ])
+    params.expect(company: [ :name, :prefix, :team_id, :tps_id, :tvq_id, :address1, :address2, :city, :zip, :country_code, :province_code, :status ])
   end
 end
