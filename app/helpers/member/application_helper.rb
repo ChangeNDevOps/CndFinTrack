@@ -42,6 +42,8 @@ module Member::ApplicationHelper
   end
 
   def items_for_companies
+    return nil if Current.companies.count.zero?
+    
     all_companies = []
     Current.companies.each do |item|
       data = item_for(member_company_path(item)).except(:path).merge(title: item.name)
@@ -60,7 +62,7 @@ module Member::ApplicationHelper
       item_for(member_root_path),
       item_for(member_teams_path),
       items_for_companies
-    ]
+    ].compact
   end
 
   def nav_menu_simple_complete
