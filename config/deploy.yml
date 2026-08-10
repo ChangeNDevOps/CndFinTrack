@@ -81,7 +81,5 @@ accessories:
         MEILI_NO_ANALYTICS: "true"
       secret:
         - MEILI_MASTER_KEY
-    files:
-      - config/meilisearch/config.json:/meili_data/config.json
     volumes:
       - prod-cnd_fin_track_meilisearch:/meili_data
