@@ -1,0 +1,8 @@
+= f.input :name
+= f.association :users,
+  as: :select,
+  wrapper: :horizontal_form,
+  collection: User.all,
+  label_method: :email_address,
+  value_method: :id,
+  input_html: { multiple: true, data: { controller: "tom-select" } }

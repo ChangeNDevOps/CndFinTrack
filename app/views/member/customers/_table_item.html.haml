@@ -1,0 +1,42 @@
+%td
+  .d-flex.py-1.align-items-center
+    .flex-fill
+      .font-weight-medium #{item.name} (#{item.prefix})
+      .text-secondary
+        = item.address
+  .d-block.text-secondary.text-truncate.mt-2
+    - item.tags.each do |tag|
+      %span.tag
+        = icon 'tag', class: "icon-xs"
+        = tag.name
+  %td
+    .d-block
+      = number_to_currency item.quotes.sum(&:calc_total_ht)
+      (#{item.quotes.count})
+    .d-block
+      Approved:
+      = number_to_currency item.quotes.approved.sum(&:calc_total_ht)
+      (#{item.quotes.approved.count})
+    .d-block
+      Rejected:
+      = number_to_currency item.quotes.rejected.sum(&:calc_total_ht)
+      (#{item.quotes.rejected.count})
+  %td.text-secondary
+    .d-block
+      = number_to_currency item.invoices.sum(&:calc_total_ht)
+  %td.text-secondary
+    = number_to_currency item.invoices.due.sum(&:calc_total_ht)
+  %td.text-secondary
+    = number_to_currency item.invoices.not_due.sum(&:calc_total_ht)
+  %td
+    .col-auto
+      .dropdown.no-arrow
+        %a.dropdown-toggle.text-secondary{"aria-expanded" => "false", "aria-haspopup" => "true", "aria-label" => "Select time range for revenue", "data-bs-toggle" => "dropdown", :href => "#"}= icon "dots-vertical"
+        .dropdown-menu.dropdown-menu-end{"aria-labelledby" => "revenue-dropdown", :style => ""}
+          = link_to edit_member_company_customer_path(@company, item), class: "dropdown-item" do
+            = icon "edit"
+            Edit
+          .dropdown-divider
+          = link_to member_company_customer_path(@company, item), class: "dropdown-item", method: :delete, data:  { turbo_method: :delete, turbo_confirm: "Confirm ?" } do
+            = icon "trash"
+            Delete

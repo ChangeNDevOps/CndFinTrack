@@ -1,0 +1,15 @@
+.col-12
+  .card
+    - if local_assigns.has_key?(:title)
+      .card-header
+        %h3.card-title= title
+    .card-body.text-end
+      != @pagy.info_tag
+    .list-group.list-group-flush.list-group-hoverable
+      - items.each do |item|
+        .list-group-item
+          .row.align-items-center
+            = render partial: 'list_item', locals: { item: item }
+    .card-footer.d-flex.justify-content-center
+      != @pagy.series_nav((:bootstrap))
+= render partial: 'search'

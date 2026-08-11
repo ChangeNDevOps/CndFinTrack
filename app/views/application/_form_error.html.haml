@@ -1,0 +1,19 @@
+- if form_table.errors.any?
+  .alert.alert-danger.alert-dismissible.role-alert{ "data-bs-dismiss" => "alert" }
+    .d-flex
+      %div
+        -# Icône d'alerte native de Tabler (SVG)
+        %svg.icon.alert-icon{ :xmlns => "http://w3.org", :width => "24", :height => "24", :viewBox => "0 0 24 24", :stroke_width => "2", :stroke => "currentColor", :fill => "none", :stroke_linecap => "round", :stroke_linejoin => "round" }
+          %path{ :stroke => "none", :d => "0 0 24 24", :fill => "none" }
+          %path{ :d => "12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" }
+          %path{ :d => "12 9v4" }
+          %path{ :d => "12 16v.01" }
+      %div
+        %h4.alert-title
+          = "#{pluralize(form_table.errors.count, "erreur", "erreurs")} ont empêché la sauvegarde :"
+        .text-secondary
+          %ul.mb-0.ps-3
+            - form_table.errors.full_messages.each do |message|
+              %li= message
+    -# Bouton de fermeture natif de Tabler/Bootstrap
+    %a.btn-close{ "data-bs-dismiss" => "alert", :aria_label => "close" }

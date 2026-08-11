@@ -1,0 +1,14 @@
+.grid.grid-cols-1.xl:grid-cols-3.gap-5{:class => "lg:gap-7.5"}
+  .col-span-2
+    .flex.flex-col.gap-5{:class => "lg:gap-7.5"}
+      .flex.items-left.justify-left.grow.bg-left.bg-no-repeat.page-bg.mb-5
+        .kt-card.w-full
+          = simple_form_for @item, url: form_url, html: {class: "simple_form"}  do |f|
+            = render partial: "form_error", locals: { form_table: @item }
+            = render partial: "fields", locals: { f: f }
+            .actions.text-right
+              = f.submit t('globals.save'), class: 'mt-5 kt-btn kt-btn-dark'
+  .col-span-1
+    .grid.gap-5{:class => "lg:gap-7.5"}
+      .kt-card
+        = render 'hint'

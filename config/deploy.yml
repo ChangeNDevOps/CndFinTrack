@@ -18,6 +18,7 @@ env:
     - KAMAL_REGISTRY_PASSWORD
     - MEILI_MASTER_KEY
     - POSTGRES_HOST
+    - MEILISEARCH_API_KEY
   clear:
     SOLID_QUEUE_IN_PUMA: true
     PORT: 8080
@@ -25,6 +26,7 @@ env:
     HOST: <%= ENV["HOST"] %>
     RAILS_LOG_LEVEL: debug
     RAILS_ENV: production
+    MEILISEARCH_HOST: http://cnd_fin_track-meilisearch:7700
 
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
@@ -51,3 +53,32 @@ builder:
     - HOST
     - MEILI_MASTER_KEY
     - POSTGRES_HOST
+
+accessories:
+  db:
+    image: postgres:18
+    host: 158.69.116.112
+    port: "5433"
+    env:
+      secret:
+        - POSTGRES_PASSWORD
+        - POSTGRES_DB
+        - POSTGRES_USER
+      clear:
+        PGPORT: 5433
+        DB_HOST: <%= ENV.fetch("POSTGRES_HOST", "cnd_fin_track-db") %>
+    volumes:
+      - prod-cnd_fin_track:/var/lib/postgresql
+  meilisearch:
+    image: getmeili/meilisearch:v1.52
+    roles:
+      - web
+    port: "7700:7700"
+    env:
+      clear:
+        MEILI_ENV: production
+        MEILI_NO_ANALYTICS: "true"
+      secret:
+        - MEILI_MASTER_KEY
+    volumes:
+      - prod-cnd_fin_track_meilisearch:/meili_data

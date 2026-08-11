@@ -1,0 +1,12 @@
+.col-12
+  .card
+    .table-responsive
+      %table.table.table-vcenter.card-table
+        %thead
+          %tr
+            - if lookup_context.exists?("table_header", [controller_path], true)
+              = render partial: "table_header"
+        %tbody
+          - @items.each do |item|
+            %tr
+              = render partial: "table_item", locals: { item: item }

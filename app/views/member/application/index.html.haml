@@ -1,0 +1,4 @@
+- if lookup_context.exists?("table_header", [controller_path], true)
+  = render partial: 'table', locals: {items: @items}
+- else
+  = render partial: 'list', locals: {items: @items}

@@ -2,3 +2,13 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 import "tabler"
+import "jquery"
+import "tom-select"
+import "select2"
+
+document.addEventListener("turbo:load", function() {
+
+});
+
+import "trix"
+import "@rails/actiontext"

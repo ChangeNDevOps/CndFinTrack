@@ -1,0 +1,7 @@
+= f.input :amount
+= f.input :paid_on, wrapper: :horizontal_form, as: :string, input_html: { data: { controller: "datepicker" } }
+= f.association :invoice,
+  as: :select,
+  wrapper: :horizontal_form,
+  collection: @company.invoices,
+  input_html: { multiple: false, data: { controller: "tom-select" } }

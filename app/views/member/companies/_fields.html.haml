@@ -1,0 +1,33 @@
+= f.input :name
+= f.association :team,
+    collection: Current.user.teams,
+    as: :select,
+    wrapper: :horizontal_form,
+    include_blank: false,
+    input_html: { multiple: false, data: { controller: "tom-select" } }
+= f.input :tps_id
+= f.input :tvq_id
+= f.input :address1
+= f.input :address2
+= f.input :zip
+= f.input :city
+= f.input :prefix
+= f.input :status,
+  as: :select,
+  wrapper: :horizontal_form,
+  collection: f.object.class.statuses.keys.map { |status| [status.titleize, status] },
+  include_blank: false
+
+.country{ "data-controller" => "location"}
+  = f.input :country_code,
+    as: :country,
+    wrapper: :horizontal_form,
+    prompt: t('.select'),
+    priority: ["CA", "FR"],
+    input_html: { data: { action: "change->location#updateProvinces", location_target: "country" } }
+
+  = f.input :province_code,
+    collection: province_options(f.object.country_code),
+    wrapper: :horizontal_form,
+    prompt: t('.select'),
+    input_html: { data: { location_target: "province" } }

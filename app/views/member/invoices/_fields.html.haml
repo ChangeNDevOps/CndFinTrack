@@ -1,0 +1,10 @@
+= f.input :invoiced_on, wrapper: :horizontal_form, as: :string, input_html: { data: { controller: "datepicker" } }
+= f.input :due_on, wrapper: :horizontal_form, as: :string, input_html: { data: { controller: "datepicker" } }
+= f.association :quote,
+  as: :select,
+  wrapper: :horizontal_form,
+  collection: @company.quotes,
+  input_html: { multiple: false, data: { controller: "tom-select" } }
+= f.input :taxable,
+  wrapper: :horizontal_boolean,
+  wrapper_html: { class: "form-check form-switch mb-3" }

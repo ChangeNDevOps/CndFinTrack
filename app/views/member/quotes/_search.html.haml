@@ -1,0 +1,16 @@
+#offcanvasEnd.offcanvas.offcanvas-end{"aria-labelledby" => "offcanvasEndLabel", :tabindex => "-1"}
+  .offcanvas-header
+    %h2 Search
+    %button.btn-close.text-reset{"aria-label" => "Close", "data-bs-dismiss" => "offcanvas", :type => "button"}
+  .offcanvas-body
+    %div
+      = simple_form_for @item, url: member_company_quotes_path(@company), method: :get, html: {class: "simple_form"}  do |f|
+        = render partial: "form_error", locals: { form_table: @item }
+        = f.association :customer, collection: @company.customers
+        = f.input :name
+        .mt-3.d-flex.justify-content-between.align-items-center
+          %div
+            = link_to "Cancel search", back_path, class: "btn btn-default"
+
+          %div
+            = f.submit 'Search', class: 'btn btn-primary'

@@ -1,60 +1,24 @@
-= form_with model: @user, url: registration_url, class: "kt-card-content flex flex-col gap-5 p-10" do |form|
-  .text-center{:class => "mb-2.5"}
-    %h3.text-lg.font-medium.text-mono.leading-none{:class => "mb-2.5"}
-      = t('.title')
-    .flex.items-center.justify-center
-      %span.text-sm.text-secondary-foreground{:class => "me-1.5"}
-        = t('.already_have_account')
-        = link_to t('.log_in'), new_session_path, class: "text-sm link"
-    %h4.text-sm.text-secondary-foreground{:class => "mb-2.5"}
-      - if locale == :fr
-        = link_to t(".switch_account_to_english"), new_registration_path(locale: :en), class: "kt-link kt-link-underlined kt-link-dashed"
-      - else
-        = link_to t(".switch_account_to_french"), new_registration_path(locale: :fr), class: "kt-link kt-link-underlined kt-link-dashed"
-  - if @user.errors.any?
-    %div{:style => "color: red"}
-      %ul
-        - @user.errors.full_messages.each do |message|
-          %li= message
-  .flex.flex-col.gap-1
-    %label.kt-form-label.text-mono
-      = t("activerecord.attributes.user.email_address")
-    = form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: t('activerecord.placeholders.user.email_address'), value: params[:email_address], class: "kt-input"
-  .flex.flex-col.gap-1
-    %label.kt-form-label.font-normal.text-mono
-      = t("activerecord.attributes.user.password")
-    .kt-input{"data-kt-toggle-password" => "true"}
-      = form.password_field :password, required: true, autocomplete: "current-password", placeholder: t('activerecord.placeholders.user.password'), maxlength: 72
-      %button.kt-btn.kt-btn-sm.kt-btn-ghost.kt-btn-icon{:class => "bg-transparent! -me-1.5", "data-kt-toggle-password-trigger" => "true", :type => "button"}
-        %span.kt-toggle-password-active:hidden
-          %i.ki-filled.ki-eye.text-muted-foreground
-        %span.hidden.kt-toggle-password-active:block
-          %i.ki-filled.ki-eye-slash.text-muted-foreground
-  .flex.flex-col.gap-1
-    %label.kt-form-label.font-normal.text-mono
-      = t("activerecord.attributes.user.password_confirmation")
-    .kt-input{"data-kt-toggle-password" => "true"}
-      = form.password_field :password_confirmation, required: true, autocomplete: "current-password", placeholder: t('activerecord.placeholders.user.password_confirmation'), maxlength: 72
-      %button.kt-btn.kt-btn-sm.kt-btn-ghost.kt-btn-icon{:class => "bg-transparent! -me-1.5", "data-kt-toggle-password-trigger" => "true", :type => "button"}
-        %span.kt-toggle-password-active:hidden
-          %i.ki-filled.ki-eye.text-muted-foreground
-        %span.hidden.kt-toggle-password-active:block
-          %i.ki-filled.ki-eye-slash.text-muted-foreground
-  .flex.flex-col.gap-1
-    %label.kt-checkbox-group.text-sm
-      %input.kt-checkbox.kt-checkbox-sm{:name => "acceptTerms", :type => "checkbox", :value => "1", id: "acceptTerms", onchange: "toggleSubmitButton()"}/
-      %span.kt-checkbox-label
-        = t('.accept')
-        %a.text-sm.link.kt-link-underlined.kt-link-dashed{:href => "https://docs.keyharbour.ca/terms-and-conditions/", target: "_blank"}
-          = t('.conditions')
-
-  %button.kt-btn.kt-btn-primary.flex.justify-center.grow{id: "submitBtn", disabled: true}
-    = t('.title')
-  .text-center.text-xs
-    v#{Rails.configuration.version}    
-:javascript
-  function toggleSubmitButton() {
-    const checkbox = document.getElementById('acceptTerms');
-    const submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = !checkbox.checked;
-  }
+.card.card-md
+  .card-body
+    %h2.h2.text-center.mb-4 Create an account
+    = tag.div(flash[:alert], style: "color:red") if flash[:alert]
+    = tag.div(flash[:notice], style: "color:green") if flash[:notice]
+    = form_with model: @user, url: registration_url do |form|
+      .mb-3
+        %label.form-label Email address
+        = form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "form-control"
+      .mb-2
+        %label.form-label
+          Password
+        .input-group.input-group-flat
+          = form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, class: "form-control"
+      .mb-2
+        %label.form-label
+          Password Confirmation
+        .input-group.input-group-flat
+          = form.password_field :password_confirmation, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, class: "form-control"
+      .form-footer
+        %button.btn.btn-primary.w-100{:type => "submit"} Sign up
+.text-center.text-secondary.mt-3
+  Already have an account ?
+  = link_to "Sign in", new_session_path

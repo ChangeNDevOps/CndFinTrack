@@ -1,0 +1,38 @@
+%td
+  #{item.uuid}
+
+%td
+  .d-flex.py-1.align-items-center
+    .flex-fill
+      .font-weight-medium
+        = link_to item.invoice.name, member_company_invoice_path(@company, item.invoice)
+      .text-secondary #{item.quote.name}
+      - if item.invoice.paid?
+        Payed
+      - else
+        = number_to_currency item.invoice.amount_unpaid
+  .d-block.text-secondary.text-truncate.mt-2
+    - item.quote.tags.each do |tag|
+      %span.tag
+        = icon 'tag', class: "icon-xs"
+        = tag.name
+  %td.text-end
+    = number_to_currency item.amount
+  %td.text-secondary.text-center
+    TBC
+    -#     - if item.paid?
+    -#       = icon "circle-check", class: "text-success icon-lg" if item.approved?
+    -#     - else
+    -#       = number_to_currency item.amount_unpaid
+  %td
+    .col-auto
+      .dropdown.no-arrow
+        %a.dropdown-toggle.text-secondary{"aria-expanded" => "false", "aria-haspopup" => "true", "aria-label" => "Select time range for revenue", "data-bs-toggle" => "dropdown", :href => "#"}= icon "dots-vertical"
+        .dropdown-menu.dropdown-menu-end{"aria-labelledby" => "revenue-dropdown", :style => ""}
+          = link_to edit_member_company_payment_path(@company, item), class: "dropdown-item" do
+            = icon "edit"
+            Edit
+          .dropdown-divider
+          = link_to member_company_payment_path(@company, item), class: "dropdown-item", method: :delete, data:  { turbo_method: :delete, turbo_confirm: "Confirm delete ?" } do
+            = icon "trash"
+            Delete
