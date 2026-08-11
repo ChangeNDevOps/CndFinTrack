@@ -1,3 +1,10 @@
+## v0.7.1 (2026-08-11)
+
+### Bug Fixes
+* MEILI_UPGRADE a true (c1b1c1cc)
+
+---
+
 ## v0.7.0 (2026-08-10)
 
 ### Features
