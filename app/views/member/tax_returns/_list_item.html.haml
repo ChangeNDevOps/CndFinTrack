@@ -1,0 +1,18 @@
+.col.text-truncate
+  %a.text-reset.d-block{:href => "#"}= item.start_at
+  -# .d-block.text-secondary.text-truncate.mt-n1 each #{item.tax_return_duration_in_month} months
+  -# .d-block
+  -#   - item.tax_returns.each do |tax_return|
+  -#     = tax_return.start_at
+  -#   = link_to "Add new", new_member_company_tax_yearly_tax_return_path(@company, item)
+.col-auto
+  .dropdown.no-arrow
+    %a.dropdown-toggle.text-secondary{"aria-expanded" => "false", "aria-haspopup" => "true", "aria-label" => "Select time range for revenue", "data-bs-toggle" => "dropdown", :href => "#"}= icon "dots-vertical"
+    .dropdown-menu.dropdown-menu-end{"aria-labelledby" => "revenue-dropdown", :style => ""}
+      = link_to edit_member_company_tax_yearly_tax_return_path(@company, @tax_yearly, item), class: "dropdown-item" do
+        = icon "edit"
+        Edit
+      .dropdown-divider
+      = link_to member_company_tax_yearly_tax_return_path(@company, @tax_yearly, item), class: "dropdown-item", method: :delete, data:  { turbo_method: :delete, turbo_confirm: "Confirm ?" } do
+        = icon "trash"
+        Delete
