@@ -10,9 +10,10 @@ class Company < ApplicationRecord
   has_many :suppliers
   has_many :expenses
   has_many :products
-  has_many :tax_return
-  has_many :tax_return_expenses, through: :tax_return
-  has_many :tax_return_payments, through: :tax_return
+  has_many :tax_yearlies
+  has_many :tax_returns, through: :tax_yearlies
+  has_many :tax_return_expenses, through: :tax_returns
+  has_many :tax_return_payments, through: :tax_returns
   has_many :quotes
   has_many :quote_items, through: :quotes
   has_many :invoices, through: :quotes

@@ -11,7 +11,9 @@ module ApplicationHelper
     "member/invoices": { title: 'Invoices', icon: 'file-invoice' },
     "member/payments": { title: 'Payments', icon: 'credit-card-pay' },
     "member/products": { title: 'Products', icon: 'box' },
-    "member/quotes": { title: 'Quotes', icon: 'file-barcode' }
+    "member/quotes": { title: 'Quotes', icon: 'file-barcode' },
+    "member/tax_yearlies": { title: 'Tax yearly', icon: 'tax' },
+    "member/tax_returns": { title: 'Tax return', icon: 'receipt-tax' }
   }
 
   def controller_items

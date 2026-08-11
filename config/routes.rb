@@ -23,6 +23,9 @@ Rails.application.routes.draw do
       end
       resources :invoices
       resources :payments
+      resources :tax_yearlies do
+        resources :tax_returns
+      end
     end
     resources :teams
   end

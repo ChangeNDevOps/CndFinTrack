@@ -38,6 +38,7 @@ module Member::ApplicationHelper
     result << item_for(member_company_products_path(company))
     result << item_for(member_company_categories_path(company))
     result << item_for(member_company_tags_path(company))
+    result << item_for(member_company_tax_yearlies_path(company))
     result
   end
 
