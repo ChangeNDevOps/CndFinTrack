@@ -1,3 +1,12 @@
+## v0.7.2 (2026-08-11)
+
+### Bug Fixes
+* Meili reindex (341dcff5)
+* merge conflict (8c04f08f)
+* merge conflict (ce61f9f4)
+
+---
+
 ## v0.7.1 (2026-08-11)
 
 ### Bug Fixes
