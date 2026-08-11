@@ -1,0 +1,21 @@
+.col.text-truncate
+  %a.text-reset.d-block{:href => "#"} #{item.start_at}
+  .d-block.text-secondary.text-truncate.mt-n1 each #{item.tax_return_duration_in_month} months
+
+  - item.tax_returns.each do |tax_return|
+    .d-block
+      #{tax_return.start_at} - #{tax_return.start_at.advance(months: item.tax_return_duration_in_month)}
+  - if item.tax_returns.count == 0 || (item.tax_returns.last.start_at.advance(months: item.tax_return_duration_in_month) < item.start_at.advance(years: 1))
+    .d-block
+      = link_to "Add new", member_company_tax_yearly_tax_returns_path(@company, item), method: :post, data:  { turbo_method: :post, turbo_confirm: "Confirm creation ?" }
+.col-auto
+  .dropdown.no-arrow
+    %a.dropdown-toggle.text-secondary{"aria-expanded" => "false", "aria-haspopup" => "true", "aria-label" => "Select time range for revenue", "data-bs-toggle" => "dropdown", :href => "#"}= icon "dots-vertical"
+    .dropdown-menu.dropdown-menu-end{"aria-labelledby" => "revenue-dropdown", :style => ""}
+      = link_to edit_member_company_tax_yearly_path(@company, item), class: "dropdown-item" do
+        = icon "edit"
+        Edit
+      .dropdown-divider
+      = link_to member_company_tax_yearly_path(@company, item), class: "dropdown-item", method: :delete, data:  { turbo_method: :delete, turbo_confirm: "Confirm ?" } do
+        = icon "trash"
+        Delete
