@@ -1,3 +1,10 @@
+## v0.8.1 (2026-08-11)
+
+### Bug Fixes
+* Activate tax yearly (8faa0362)
+
+---
+
 ## v0.8.0 (2026-08-11)
 
 ### Features
