@@ -32,18 +32,6 @@ else
   export RAILS_MASTER_KEY=$(cat "$RAILS_MASTER_KEY_FILE")
 fi
 
-#MEILI_FILE="/rails/storage/meili_data"
-#
-#if [ ! -f "$MEILI_FILE" ]; then
-#  echo "Génération d'une nouvelle MEILI_MASTER_KEY..."
-#  mkdir -p "$(dirname "$MEILI_FILE")"
-#  ruby -r securerandom -e "puts SecureRandom.hex(32)" > "$MEILI_FILE"
-#  echo "Clé Meili dans $MEILI_FILE"
-#fi
-#
-#export MEILI_MASTER_KEY=$(cat "$MEILI_FILE")
-
-# If running the rails server then create or migrate existing database
 if [[ "${@: -2:1}" == "./bin/rails" && "${@: -1:1}" == "server" ]]; then
   ./bin/rails db:prepare
   ./bin/rails db:migrate
@@ -53,14 +41,12 @@ echo -e "\e[32mSUCCESS : Docker Entry point executé avec les arguments: $@"
 
 export $(grep -v '^#' $SECRET_DB | xargs)
 
-#cd $MEILI_DB_PATH
-#meilisearch --no-analytics --db-path $MEILI_DB_PATH --master-key="${MEILI_MASTER_KEY:-password123}" &
 cd /rails
 
 echo "Vérification et préparation de la base de données..."
 ./bin/rails db:prepare
 ./bin/rails db:migrate
-
+./bin/rails meilisearch:reindex
 if [ $# -gt 0 ]; then
   exec "$@"
 else
